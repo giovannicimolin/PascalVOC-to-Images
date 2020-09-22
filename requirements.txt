@@ -1,2 +1,2 @@
-xmltodict==0.11.0
-Pillow==4.2.1
+xmltodict
+Pillow
