@@ -49,21 +49,40 @@ def extractDataset(dataset):
         os.mkdir(save_dir)
     except:
         pass
-    # Image name preamble
-    sample_preamble = save_dir + "/" + dataset['filename'].split('.')[0] + "_"
+    
     # Image counter
     i = 0
-
+    
     # Run through each item and save cut image to output folder
     for item in dataset['object']:
         # Convert str to integers
-        bndbox = dict([(a, int(b)) for (a, b) in item['bndbox'].items()])
-        # Crop image
-        im = img.crop((bndbox['xmin'], bndbox['ymin'],
-                       bndbox['xmax'], bndbox['ymax']))
-        # Save
-        im.save(sample_preamble + str(i) + '.jpg')
-        i = i + 1
+        if len(dataset['object']) == 5:
+            if item == 'bndbox':
+                print(dataset['object'][item])
+                bndbox = dict([(a, int(b)) for (a, b) in dataset['object'][item].items()])
+                
+                # Crop image
+                im = img.crop((bndbox['xmin'], bndbox['ymin'],
+                               bndbox['xmax'], bndbox['ymax']))
+                
+                # Image name preamble
+                sample_preamble = save_dir + "/" + dataset['object']['name'].split('.')[0] + "_"
+                
+                # Save
+                im.save(sample_preamble + str(i) + '.jpg')
+                i = i + 1
+        else:
+            bndbox = dict([(a, int(b)) for (a, b) in item['bndbox'].items()])
+            # Crop image
+            im = img.crop((bndbox['xmin'], bndbox['ymin'],
+                           bndbox['xmax'], bndbox['ymax']))
+                           
+            # Image name preamble
+            sample_preamble = save_dir + "/" + item['name'].split('.')[0] + "_"
+    
+            # Save
+            im.save(sample_preamble + str(i) + '.jpg')
+            i = i + 1
 
 if __name__ == '__main__':
     print("\n------------------------------------")
